@@ -1,0 +1,60 @@
+@font-face {
+    font-family: "MarathonShapiro";
+    src: url("./public/marathonshapirowide.otf") format("opentype");
+}
+
+.marathonshapiro {
+    font-family: "MarathonShapiro", sans-serif;
+}
+
+body {
+  margin: 0;
+  color:white;
+  background-color: #161616;
+  height: 100vh;
+  width: 100vw;
+}
+
+.maincontainer {
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+
+  padding: 8vh  5.25vw 11.5vh 5.25vw;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px; 
+}
+
+.titlecontainer{
+  background-color: rgba(0, 255, 255, 0.212);
+   grid-area: 1 / 1 / 2 / 3;
+}
+
+.title{
+  font-size: 8rem;
+  margin: 0;
+}
+
+.subtitle{
+  margin: 0;
+}
+
+.optionscontainer{
+  background-color: rgba(0, 255, 0, 0.212);
+  grid-area: 2 / 1 / 3 / 2;
+  font-size: 1.25rem;
+}
+
+.socialscontainer{
+  background-color: rgba(255, 0, 0, 0.212);
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.logo{  
+  width: 4.5rem;
+  height: 4.5rem;
+}
