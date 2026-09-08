@@ -1,0 +1,88 @@
+/* From Uiverse.io by Li-Deheng modified strongly by FocusLost aka LvK*/ 
+/* https://uiverse.io/Li-Deheng/shy-moth-10 */
+
+.button {
+  --color-text: #ffffff;
+  --color-shadow: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--color-text);
+  background-color: transparent;
+  transition: 1s;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.button:hover span {
+  text-shadow: 0.33rem 0.33rem 0.33rem var(--color-shadow);
+}
+
+.button:active span {
+  text-shadow: none;
+}
+
+.button svg {
+  height: 1rem;
+  width: 0;
+  fill: none;
+  margin-right: 0rem;
+  position: relative;
+  transition: width 0.8s, margin-right 0.8s;
+}
+
+.button:hover svg {
+  margin-right: 0.6rem;
+  width: 1.54rem;
+  fill: var(--color-text);
+  transition: 0.8s;
+  filter: drop-shadow(0.33rem 0.33rem 0.125rem var(--color-shadow));
+}
+
+.button:active svg {
+  filter: none;
+}
+
+.button svg polygon:nth-child(1) {
+  transition: 0.4s;
+  transform: translateX(-60%);
+}
+
+.button svg polygon:nth-child(2) {
+  transition: 0.5s;
+  transform: translateX(-30%);
+}
+
+.button:hover svg polygon:nth-child(1) {
+  transform: translateX(0%);
+  animation: opacity 1s infinite 0.6s;
+}
+
+.button:hover svg polygon:nth-child(2) {
+  transform: translateX(0%);
+  animation: opacity 1s infinite 0.4s;
+}
+
+.button:hover svg polygon:nth-child(3) {
+  animation: opacity 1s infinite 0.2s;
+}
+
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
