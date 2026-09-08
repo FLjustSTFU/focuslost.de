@@ -8,13 +8,23 @@
 }
 
 body {
+  --color-text: #ffffff;
+  --color-shadow: rgba(255, 255, 255, 0.65);
   margin: 0;
-  color:white;
+  color: var(--color-text);
   background-color: #161616;
   height: 100vh;
   width: 100vw;
   user-select: none;
 }
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 
 .maincontainer {
   box-sizing: border-box;
@@ -31,21 +41,20 @@ body {
 }
 
 .titlecontainer{
-  /* background-color: rgba(0, 255, 255, 0.212); */
    grid-area: 1 / 1 / 2 / 3;
 }
 
 .title{
-  font-size: 8rem;
+  font-size: 9rem;
   margin: 0;
 }
 
 .subtitle{
+  font-size: 1.25rem;
   margin: 0;
 }
 
 .optionscontainer{
-  /* background-color: rgba(0, 255, 0, 0.212); */
   grid-area: 2 / 1 / 3 / 2;
   display: flex;
   flex-direction: column;
@@ -53,26 +62,11 @@ body {
   align-items: flex-start;  
 }
 
-/* button{
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 1.25rem;
-  margin: 0.5em 0;
-  cursor: pointer;
-  padding: 0;
-} */
-
-
-/* Options */
 .optionscontainer a:hover{
   text-decoration: underline;
 }
 
-
-
 .socialscontainer{
-  /* background-color: rgba(255, 0, 0, 0.212); */
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   flex-direction: column;
