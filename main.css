@@ -22,7 +22,7 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 11;
 }
 
 
@@ -44,10 +44,10 @@ canvas {
    grid-area: 1 / 1 / 2 / 3;
 }
 
-.title{
+/* .title{
   font-size: 9rem;
   margin: 0;
-}
+} */
 
 .subtitle{
   font-size: 1.25rem;
