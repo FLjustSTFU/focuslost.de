@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 			import Stats from 'three/addons/libs/stats.module.js';
 
-			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { Water } from 'three/addons/objects/Water.js';
 			import { Sky } from 'three/addons/objects/Sky.js';
@@ -25,13 +24,13 @@ import * as THREE from 'three';
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				renderer.setAnimationLoop( animate );
 				renderer.toneMapping = THREE.ACESFilmicToneMapping;
-				renderer.toneMappingExposure = 0.1;
+				renderer.toneMappingExposure = 0.05;
 				container.appendChild( renderer.domElement );
 
 				bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
 				bloomPass.threshold = 0;
-				bloomPass.strength = 0.1;
-				bloomPass.radius = 0;
+				bloomPass.strength = 0.075;
+				bloomPass.radius = 0.5;
 				renderer.setEffects( [ bloomPass ] );
 
 				//
@@ -40,6 +39,7 @@ import * as THREE from 'three';
 
 				camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 20000 );
 				camera.position.set( 30, 30, 100 );
+				camera.lookAt( 0, 10, 0 );
 
 				timer = new THREE.Timer();
 
@@ -62,12 +62,14 @@ import * as THREE from 'three';
 
 						} ),
 						sunDirection: new THREE.Vector3(),
-						sunColor: 0xffffff,
+						sunColor: 0xc080ff,
 						waterColor: 0x001e0f,
-						distortionScale: 3.7,
+						distortionScale: 6,
 						fog: scene.fog !== undefined
+						
 					}
 				);
+
 
 				water.rotation.x = - Math.PI / 2;
 
@@ -82,17 +84,17 @@ import * as THREE from 'three';
 				const skyUniforms = sky.material.uniforms;
 
 				skyUniforms[ 'turbidity' ].value = 10;
-				skyUniforms[ 'rayleigh' ].value = 2;
+				skyUniforms[ 'rayleigh' ].value = 1;
 				skyUniforms[ 'mieCoefficient' ].value = 0.005;
 				skyUniforms[ 'mieDirectionalG' ].value = 0.8;
-				skyUniforms[ 'cloudCoverage' ].value = 0.4;
-				skyUniforms[ 'cloudDensity' ].value = 0.5;
+				skyUniforms[ 'cloudCoverage' ].value = 0.26;
+				skyUniforms[ 'cloudDensity' ].value = 0.6;
 				skyUniforms[ 'cloudElevation' ].value = 0.5;
 
 				const parameters = {
-					elevation: 2,
+					elevation: 22.5,
 					azimuth: 180,
-					exposure: 0.1
+					exposure: 0.03
 				};
 
 				const pmremGenerator = new THREE.PMREMGenerator( renderer );
@@ -101,6 +103,7 @@ import * as THREE from 'three';
 				let renderTarget;
 
 				function updateSun() {
+
 
 					const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
 					const theta = THREE.MathUtils.degToRad( parameters.azimuth );
@@ -132,51 +135,18 @@ import * as THREE from 'three';
 
 				//
 
-				controls = new OrbitControls( camera, renderer.domElement );
-				controls.maxPolarAngle = Math.PI * 0.495;
-				controls.target.set( 0, 10, 0 );
-				controls.minDistance = 40.0;
-				controls.maxDistance = 200.0;
-				controls.update();
+				// OrbitControls which are useless with the negative z-index, but I will leave them here for future use
+				// controls = new OrbitControls( camera, renderer.domElement );
+				// controls.maxPolarAngle = Math.PI * 0.495;
+				// controls.target.set( 0, 10, 0 );
+				// controls.minDistance = 40.0;
+				// controls.maxDistance = 200.0;
+				// controls.update();
 
 				//
 
 				stats = new Stats();
 				container.appendChild( stats.dom );
-
-				// GUI
-
-				const gui = new GUI();
-
-				const folderSky = gui.addFolder( 'Sky' );
-				folderSky.add( parameters, 'elevation', 0, 90, 0.1 ).onChange( updateSun );
-				folderSky.add( parameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSun );
-				folderSky.add( parameters, 'exposure', 0, 1, 0.0001 ).onChange( function ( value ) {
-
-					renderer.toneMappingExposure = value;
-
-				} );
-				folderSky.open();
-
-				const waterUniforms = water.material.uniforms;
-
-				const folderWater = gui.addFolder( 'Water' );
-				folderWater.add( waterUniforms.distortionScale, 'value', 0, 8, 0.1 ).name( 'distortionScale' );
-				folderWater.add( waterUniforms.size, 'value', 0.1, 10, 0.1 ).name( 'size' );
-				folderWater.open();
-
-				const folderBloom = gui.addFolder( 'Bloom' );
-				folderBloom.add( bloomPass, 'strength', 0, 3, 0.01 );
-				folderBloom.add( bloomPass, 'radius', 0, 1, 0.01 );
-				folderBloom.open();
-
-				const folderClouds = gui.addFolder( 'Clouds' );
-				folderClouds.add( skyUniforms.cloudCoverage, 'value', 0, 1, 0.01 ).name( 'coverage' );
-				folderClouds.add( skyUniforms.cloudDensity, 'value', 0, 1, 0.01 ).name( 'density' );
-				folderClouds.add( skyUniforms.cloudElevation, 'value', 0, 1, 0.01 ).name( 'elevation' );
-				folderClouds.open();
-
-				//
 
 				window.addEventListener( 'resize', onWindowResize );
 
@@ -200,6 +170,10 @@ import * as THREE from 'three';
 			}
 
 			function render() {
+
+				//console.log(camera.rotation.x, camera.rotation.y, camera.rotation.z);
+				// -0.1973955598498809 0.286103493730573 0.056383426681258585
+
 
 				const time = performance.now() * 0.001;
 
