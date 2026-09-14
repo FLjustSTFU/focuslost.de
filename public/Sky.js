@@ -2,7 +2,6 @@ import {
 	BackSide,
 	BoxGeometry,
 	Mesh,
-	Color,
 	ShaderMaterial,
 	UniformsUtils,
 	Vector3
@@ -84,9 +83,6 @@ Sky.SkyShader = {
 		'mieDirectionalG': { value: 0.8 },
 		'sunPosition': { value: new Vector3() },
 		'up': { value: new Vector3( 0, 1, 0 ) },
-
-		'sunColor': { value: new Color( 0x9b4dff ) },
-
 		'cloudScale': { value: 0.0002 },
 		'cloudSpeed': { value: 0.0001 },
 		'cloudCoverage': { value: 0.4 },
@@ -102,8 +98,6 @@ Sky.SkyShader = {
 		uniform float turbidity;
 		uniform float mieCoefficient;
 		uniform vec3 up;
-
-		uniform vec3 sunColor;
 
 		varying vec3 vWorldPosition;
 		varying vec3 vSunDirection;
@@ -176,8 +170,6 @@ Sky.SkyShader = {
 		varying vec3 vBetaR;
 		varying vec3 vBetaM;
 		varying float vSunE;
-
-		uniform vec3 sunColor;
 
 		uniform float mieDirectionalG;
 		uniform vec3 up;
@@ -266,10 +258,7 @@ Sky.SkyShader = {
 			float mPhase = hgPhase( cosTheta, mieDirectionalG );
 			vec3 betaMTheta = vBetaM * mPhase;
 
-			vec3 sunlight = vSunE *( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) );
-	  		
-			vec3 Lin = pow(sunlight * ( 1.0 - Fex ),vec3( 1.5 )) * sunColor;
-
+			vec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );
 			Lin *= mix( vec3( 1.0 ), pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * Fex, vec3( 1.0 / 2.0 ) ), clamp( pow( 1.0 - dot( up, vSunDirection ), 5.0 ), 0.0, 1.0 ) );
 
 			// nightsky
@@ -280,7 +269,7 @@ Sky.SkyShader = {
 
 			// composition + solar disc
 			float sundisc = smoothstep( sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta ) * showSunDisc;
-			L0 += ( vSunE * 19000.0 * Fex ) * sundisc * sunColor;
+			L0 += ( vSunE * 19000.0 * Fex ) * sundisc;
 
 			// vec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );
 				vec3 texColor = ( Lin + L0 ) * 0.04 + vec3(0.0006, 0.00015, 0.0008);
